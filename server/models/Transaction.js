@@ -1,5 +1,3 @@
-// models/Transaction.js — DEFINES WHAT A TRANSACTION LOOKS LIKE
-// Notice the `userId` field — this is how each transaction is "owned" by a user
 // Every query filters by userId so users only see their own data
 
 const mongoose = require("mongoose");
@@ -24,10 +22,6 @@ const TransactionSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      // categories for expense
-      // "Food", "Transport", "Shopping", "Entertainment", "Utilities", "Health", "Other"
-      // categories for income
-      // "Salary", "Freelance", "Business", "Investment", "Other"
     },
     description: {
       type: String,
@@ -44,16 +38,15 @@ const TransactionSchema = new mongoose.Schema(
       default: false, // monthly recurring transactions
     },
     recurringDay: {
-      type: Number, // day of month (1-31) if recurring
+      type: Number,
       default: null,
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-// Index for fast queries — when React asks "get all transactions for userId X",
 // MongoDB uses this index instead of scanning every document
 TransactionSchema.index({ userId: 1, date: -1 }); // -1 = newest first
 

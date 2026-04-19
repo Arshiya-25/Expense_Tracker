@@ -1,6 +1,4 @@
-// routes/transactions.js — ALL TRANSACTION CRUD + ANALYTICS
 // Notice how every route uses `protect` middleware and filters by `req.userId`
-// This is what makes data per-user — each query is scoped to the logged-in user
 
 const express = require("express");
 const router = express.Router();
@@ -10,8 +8,6 @@ const protect = require("../middleware/auth");
 // All routes here require authentication
 router.use(protect);
 
-// GET /api/transactions — get all transactions for current user
-// Supports filters: ?type=expense&month=3&year=2026&category=Food
 router.get("/", async (req, res) => {
   try {
     const { type, month, year, category } = req.query;
@@ -38,7 +34,15 @@ router.get("/", async (req, res) => {
 // POST /api/transactions — create a new transaction
 router.post("/", async (req, res) => {
   try {
-    const { type, amount, category, description, date, isRecurring, recurringDay } = req.body;
+    const {
+      type,
+      amount,
+      category,
+      description,
+      date,
+      isRecurring,
+      recurringDay,
+    } = req.body;
 
     const transaction = await Transaction.create({
       userId: req.userId, // always from the token, never from the request body (security!)
@@ -79,7 +83,7 @@ router.put("/:id", async (req, res) => {
     const transaction = await Transaction.findOneAndUpdate(
       { _id: req.params.id, userId: req.userId },
       req.body,
-      { new: true } // return the UPDATED document, not the old one
+      { new: true }, // return the UPDATED document, not the old one
     );
     if (!transaction) return res.status(404).json({ message: "Not found" });
     res.json(transaction);
@@ -88,7 +92,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// GET /api/transactions/summary — AGGREGATION (the star feature)
 // MongoDB aggregation pipeline = a series of transformation steps on your data
 // This returns monthly totals, category breakdown — powers your charts
 router.get("/summary", async (req, res) => {
@@ -96,7 +99,9 @@ router.get("/summary", async (req, res) => {
     const { year } = req.query;
     const targetYear = parseInt(year) || new Date().getFullYear();
 
-    const userId = require("mongoose").Types.ObjectId.createFromHexString(req.userId);
+    const userId = require("mongoose").Types.ObjectId.createFromHexString(
+      req.userId,
+    );
 
     // AGGREGATION PIPELINE — like SQL GROUP BY but more powerful
     const monthlySummary = await Transaction.aggregate([

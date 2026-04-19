@@ -1,12 +1,15 @@
-// src/pages/Register.jsx
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { register as registerApi } from "../api";
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "", currency: "INR" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    currency: "INR",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { login } = useAuth();
@@ -15,7 +18,10 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (form.password.length < 6) { setError("Password must be at least 6 characters"); return; }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
     setLoading(true);
     try {
       const res = await registerApi(form);
@@ -131,17 +137,39 @@ export default function Register() {
         <div className="reg-left">
           <div className="reg-card">
             <div style={{ textAlign: "center", marginBottom: 26 }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 14, background: "var(--accent)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                margin: "0 auto 16px",
-              }}>
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 14,
+                  background: "var(--accent)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 16px",
+                }}
+              >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                  <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                  <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
                 </svg>
               </div>
-              <h1 style={{ fontSize: 26, fontWeight: 650, letterSpacing: "-0.03em" }}>Create account</h1>
-              <p style={{ color: "var(--text3)", fontSize: 14, marginTop: 6, lineHeight: 1.6 }}>
+              <h1
+                style={{
+                  fontSize: 26,
+                  fontWeight: 650,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                Create account
+              </h1>
+              <p
+                style={{
+                  color: "var(--text3)",
+                  fontSize: 14,
+                  marginTop: 6,
+                  lineHeight: 1.6,
+                }}
+              >
                 Track smarter. Spend better.
               </p>
             </div>
@@ -154,7 +182,9 @@ export default function Register() {
                   type="text"
                   placeholder="Arshiya Singh"
                   value={form.name}
-                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, name: e.target.value }))
+                  }
                   autoFocus
                 />
               </div>
@@ -165,7 +195,9 @@ export default function Register() {
                   type="email"
                   placeholder="you@example.com"
                   value={form.email}
-                  onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, email: e.target.value }))
+                  }
                 />
               </div>
 
@@ -175,7 +207,9 @@ export default function Register() {
                   type="password"
                   placeholder="Min. 6 characters"
                   value={form.password}
-                  onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, password: e.target.value }))
+                  }
                 />
               </div>
 
@@ -183,7 +217,9 @@ export default function Register() {
                 <label>Currency</label>
                 <select
                   value={form.currency}
-                  onChange={(e) => setForm((p) => ({ ...p, currency: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, currency: e.target.value }))
+                  }
                 >
                   <option value="INR">₹ Indian Rupee (INR)</option>
                   <option value="USD">$ US Dollar (USD)</option>
@@ -193,15 +229,17 @@ export default function Register() {
               </div>
 
               {error && (
-                <div style={{
-                  background: "var(--red-dim)",
-                  border: "1px solid rgba(240,92,110,0.25)",
-                  borderRadius: "var(--r-md)",
-                  padding: "10px 14px",
-                  color: "var(--red)",
-                  fontSize: 13,
-                  marginBottom: 16,
-                }}>
+                <div
+                  style={{
+                    background: "var(--red-dim)",
+                    border: "1px solid rgba(240,92,110,0.25)",
+                    borderRadius: "var(--r-md)",
+                    padding: "10px 14px",
+                    color: "var(--red)",
+                    fontSize: 13,
+                    marginBottom: 16,
+                  }}
+                >
                   {error}
                 </div>
               )}
@@ -210,14 +248,33 @@ export default function Register() {
                 type="submit"
                 className="btn btn-primary"
                 disabled={loading}
-                style={{ width: "100%", justifyContent: "center", height: 42, marginTop: 4 }}
+                style={{
+                  width: "100%",
+                  justifyContent: "center",
+                  height: 42,
+                  marginTop: 4,
+                }}
               >
                 {loading ? "Creating account..." : "Create account"}
               </button>
 
-              <p style={{ textAlign: "center", marginTop: 18, fontSize: 14, color: "var(--text3)" }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: 18,
+                  fontSize: 14,
+                  color: "var(--text3)",
+                }}
+              >
                 Already have an account?{" "}
-                <Link to="/login" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 550 }}>
+                <Link
+                  to="/login"
+                  style={{
+                    color: "var(--accent)",
+                    textDecoration: "none",
+                    fontWeight: 550,
+                  }}
+                >
                   Sign in
                 </Link>
               </p>
@@ -230,23 +287,46 @@ export default function Register() {
           <div className="reg-hero">
             <div className="reg-pill">
               <span style={{ color: "var(--accent)" }}>FinFlow</span>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--border2)" }} />
-              <span style={{ color: "var(--text2)", fontWeight: 600 }}>Premium, minimal, useful</span>
+              <span
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: "50%",
+                  background: "var(--border2)",
+                }}
+              />
+              <span style={{ color: "var(--text2)", fontWeight: 600 }}>
+                Premium, minimal, useful
+              </span>
             </div>
 
             <div className="reg-hero-title">Track smarter. Spend better.</div>
             <div className="reg-hero-sub">
-              A calm way to track expenses, set category budgets, and understand your spending—month by month.
+              A calm way to track expenses, set category budgets, and understand
+              your spending—month by month.
             </div>
 
             <div className="reg-graphic">
               {/* purely decorative */}
-              <svg width="100%" height="100%" viewBox="0 0 520 220" preserveAspectRatio="none">
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 520 220"
+                preserveAspectRatio="none"
+              >
                 <defs>
                   <linearGradient id="r1" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.55" />
+                    <stop
+                      offset="0%"
+                      stopColor="var(--accent)"
+                      stopOpacity="0.55"
+                    />
                     <stop offset="55%" stopColor="#22c987" stopOpacity="0.30" />
-                    <stop offset="100%" stopColor="#f05c6e" stopOpacity="0.22" />
+                    <stop
+                      offset="100%"
+                      stopColor="#f05c6e"
+                      stopOpacity="0.22"
+                    />
                   </linearGradient>
                   <linearGradient id="r2" x1="0" y1="1" x2="1" y2="0">
                     <stop offset="0%" stopColor="white" stopOpacity="0.08" />

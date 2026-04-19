@@ -1,6 +1,4 @@
-// models/User.js — DEFINES WHAT A USER LOOKS LIKE IN THE DATABASE
 // Mongoose Schema = a blueprint. Like a class, but for database documents.
-// Every user saved to MongoDB will have exactly these fields.
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -66,13 +64,10 @@ const UserSchema = new mongoose.Schema(
   },
   {
     timestamps: true, // auto-adds createdAt and updatedAt fields
-  }
+  },
 );
 
 // PRE-SAVE HOOK — runs automatically before every .save()
-// This is where we HASH the password before storing it
-// NEVER store plain text passwords. bcrypt turns "mypassword" into "$2a$10$xyz..."
-// The "10" is the salt rounds — higher = more secure but slower (10 is standard)
 UserSchema.pre("save", async function (next) {
   // Only re-hash if the password field was actually changed
   if (!this.isModified("password")) return next();
@@ -82,12 +77,9 @@ UserSchema.pre("save", async function (next) {
 });
 
 // INSTANCE METHOD — a function you can call on any User document
-// user.comparePassword("typed_password") returns true/false
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
 // Export the model — mongoose.model("User", UserSchema) creates:
-// - A "users" collection in MongoDB (lowercase plural of "User")
-// - User.find(), User.create(), User.findById() etc.
 module.exports = mongoose.model("User", UserSchema);

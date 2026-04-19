@@ -1,8 +1,6 @@
-/* index.css — GLOBAL STYLES + DESIGN TOKENS
-   CSS variables = design tokens. Change one value, updates everywhere.
-   This is how real design systems work (Tailwind, MUI do the same thing internally) */
-
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -15,20 +13,20 @@
   --bg3: #1a1a24;
   --surface: #1e1e2a;
   --surface2: #252533;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
 
   --text: #f0f0f5;
   --text2: #9090a8;
   --text3: #5a5a70;
 
-  --accent: #7c6dfa;       /* purple — primary actions */
-  --accent2: #5b4de0;      /* darker purple */
-  --green: #22c987;        /* income */
+  --accent: #7c6dfa;
+  --accent2: #5b4de0;
+  --green: #22c987;
   --green-dim: rgba(34, 201, 135, 0.12);
-  --red: #f05c6e;          /* expense */
+  --red: #f05c6e;
   --red-dim: rgba(240, 92, 110, 0.12);
-  --amber: #f0a030;        /* warning / budget alert */
+  --amber: #f0a030;
   --amber-dim: rgba(240, 160, 48, 0.12);
 
   /* Spacing */
@@ -41,17 +39,17 @@
   --sidebar-w: 240px;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Light mode is just a variable swap, so existing components keep working. */
 body[data-theme="light"] {
   --bg: #f6f7fb;
   --bg2: #ffffff;
@@ -77,9 +75,16 @@ body[data-theme="light"] {
 }
 
 /* SCROLLBAR */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 4px;
+}
 
 /* UTILITY CLASSES */
 .card {
@@ -102,7 +107,7 @@ body[data-theme="light"] {
   gap: 6px;
   padding: 10px 18px;
   border-radius: var(--r-md);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -114,42 +119,60 @@ body[data-theme="light"] {
   background: var(--accent);
   color: white;
 }
-.btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
+.btn-primary:hover {
+  background: var(--accent2);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
 
 .btn-ghost {
   background: transparent;
   color: var(--text2);
   border: 1px solid var(--border);
 }
-.btn-ghost:hover { background: var(--surface2); color: var(--text); }
+.btn-ghost:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
 
 .btn-danger {
   background: var(--red-dim);
   color: var(--red);
-  border: 1px solid rgba(240,92,110,0.2);
+  border: 1px solid rgba(240, 92, 110, 0.2);
 }
-.btn-danger:hover { background: rgba(240,92,110,0.2); }
+.btn-danger:hover {
+  background: rgba(240, 92, 110, 0.2);
+}
 
 /* INPUT STYLES */
-input, select, textarea {
+input,
+select,
+textarea {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 14px;
   padding: 10px 14px;
   width: 100%;
   outline: none;
   transition: border-color 0.15s;
 }
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(124,109,250,0.15);
+  box-shadow: 0 0 0 3px rgba(124, 109, 250, 0.15);
 }
-input::placeholder { color: var(--text3); }
-select option { background: var(--bg3); }
+input::placeholder {
+  color: var(--text3);
+}
+select option {
+  background: var(--bg3);
+}
 
 /* BADGE */
 .badge {
@@ -160,35 +183,74 @@ select option { background: var(--bg3); }
   font-size: 12px;
   font-weight: 500;
 }
-.badge-income { background: var(--green-dim); color: var(--green); }
-.badge-expense { background: var(--red-dim); color: var(--red); }
-.badge-warning { background: var(--amber-dim); color: var(--amber); }
+.badge-income {
+  background: var(--green-dim);
+  color: var(--green);
+}
+.badge-expense {
+  background: var(--red-dim);
+  color: var(--red);
+}
+.badge-warning {
+  background: var(--amber-dim);
+  color: var(--amber);
+}
 
 /* PAGE TRANSITIONS */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .page-enter {
   animation: fadeUp 0.3s ease forwards;
 }
 
 /* STAGGERED CHILDREN */
-.stagger > * { opacity: 0; animation: fadeUp 0.3s ease forwards; }
-.stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger > *:nth-child(2) { animation-delay: 0.1s; }
-.stagger > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger > *:nth-child(4) { animation-delay: 0.2s; }
-.stagger > *:nth-child(5) { animation-delay: 0.25s; }
-.stagger > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger > * {
+  opacity: 0;
+  animation: fadeUp 0.3s ease forwards;
+}
+.stagger > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.stagger > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.stagger > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.stagger > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.stagger > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.stagger > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
 
 /* SKELETON LOADER */
 @keyframes shimmer {
-  from { background-position: -200% 0; }
-  to   { background-position: 200% 0; }
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
 }
 .skeleton {
-  background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface2) 50%,
+    var(--surface) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--r-sm);
@@ -211,7 +273,7 @@ select option { background: var(--bg3); }
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -255,12 +317,20 @@ select option { background: var(--bg3); }
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text2);
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }
-.type-btn.income.active { background: var(--green-dim); color: var(--green); border-color: rgba(34,201,135,0.3); }
-.type-btn.expense.active { background: var(--red-dim); color: var(--red); border-color: rgba(240,92,110,0.3); }
+.type-btn.income.active {
+  background: var(--green-dim);
+  color: var(--green);
+  border-color: rgba(34, 201, 135, 0.3);
+}
+.type-btn.expense.active {
+  background: var(--red-dim);
+  color: var(--red);
+  border-color: rgba(240, 92, 110, 0.3);
+}

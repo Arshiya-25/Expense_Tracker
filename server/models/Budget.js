@@ -1,6 +1,3 @@
-// models/Budget.js — PER-CATEGORY MONTHLY SPENDING LIMITS
-// This is the "smart feature" that makes your project stand out
-
 const mongoose = require("mongoose");
 
 const BudgetSchema = new mongoose.Schema(
@@ -20,7 +17,7 @@ const BudgetSchema = new mongoose.Schema(
       min: 0,
     },
     month: {
-      type: Number, // 0-11 (JavaScript month index)
+      type: Number,
       required: true,
     },
     year: {
@@ -28,10 +25,12 @@ const BudgetSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-// Compound index — each user can only have ONE budget per category per month
-BudgetSchema.index({ userId: 1, category: 1, month: 1, year: 1 }, { unique: true });
+BudgetSchema.index(
+  { userId: 1, category: 1, month: 1, year: 1 },
+  { unique: true },
+);
 
 module.exports = mongoose.model("Budget", BudgetSchema);

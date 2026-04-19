@@ -1,7 +1,3 @@
-// src/main.jsx — REACT'S ENTRY POINT
-// ReactDOM.createRoot().render() is what "boots" React inside your index.html's <div id="root">
-// Everything React renders lives inside that one div
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -18,5 +14,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <App />
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

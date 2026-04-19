@@ -1,4 +1,3 @@
-// src/pages/Profile.jsx
 // Shows user info, lets them edit name + currency, shows account stats
 
 import { useEffect, useState } from "react";
@@ -40,12 +39,16 @@ export default function Profile() {
   const [saved, setSaved] = useState(false);
 
   const initials = user?.name
-    ? user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
     : "U";
 
-  // If the user loads after first render, sync server-backed fields into the form.
   useEffect(() => {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       name: user?.name || "",
       currency: user?.currency || "INR",
@@ -62,7 +65,6 @@ export default function Profile() {
     e.preventDefault();
     setSaving(true);
     try {
-      // Keep backend payload compatible and also sync the old savings field.
       const payload = {
         name: form.name,
         currency: form.currency,
@@ -74,12 +76,12 @@ export default function Profile() {
       const res = await updateProfile(payload);
       updateUser(res.data); // update context
 
-      // Avatar initials are still frontend-only for now.
       try {
-        localStorage.setItem("finflow_avatarInitials", form.avatarInitials || "");
-      } catch {
-        // ignore if storage is blocked
-      }
+        localStorage.setItem(
+          "finflow_avatarInitials",
+          form.avatarInitials || "",
+        );
+      } catch {}
 
       setEditing(false);
       setSaved(true);
@@ -92,23 +94,52 @@ export default function Profile() {
   };
 
   const joinDate = user?.createdAt
-    ? new Date(user.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })
+    ? new Date(user.createdAt).toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
     : "—";
 
   return (
     <div className="page-enter" style={{ maxWidth: 600 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em", marginBottom: 24 }}>Profile</h1>
+      <h1
+        style={{
+          fontSize: 22,
+          fontWeight: 600,
+          letterSpacing: "-0.02em",
+          marginBottom: 24,
+        }}
+      >
+        Profile
+      </h1>
 
       {/* Profile card */}
       <div className="card" style={{ marginBottom: 16, overflow: "hidden" }}>
         {/* Avatar + name */}
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: "50%",
-            background: "linear-gradient(135deg, var(--accent), #a78bfa)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 22, fontWeight: 600, color: "white", flexShrink: 0,
-          }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            marginBottom: 24,
+          }}
+        >
+          <div
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, var(--accent), #a78bfa)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 22,
+              fontWeight: 600,
+              color: "white",
+              flexShrink: 0,
+            }}
+          >
             {(form.avatarInitials || initials).slice(0, 2)}
           </div>
           <div>
@@ -119,11 +150,21 @@ export default function Profile() {
             </p>
           </div>
           {!editing && (
-            <button className="btn btn-ghost" onClick={() => setEditing(true)}
-              style={{ marginLeft: "auto" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            <button
+              className="btn btn-ghost"
+              onClick={() => setEditing(true)}
+              style={{ marginLeft: "auto" }}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
               Edit
             </button>
@@ -134,7 +175,14 @@ export default function Profile() {
           <form onSubmit={handleSave}>
             {/* Profile info */}
             <div style={{ marginBottom: 18 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text2)", marginBottom: 10 }}>
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--text2)",
+                  marginBottom: 10,
+                }}
+              >
                 Profile info
               </p>
 
@@ -143,7 +191,9 @@ export default function Profile() {
                 <input
                   type="text"
                   value={form.name}
-                  onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, name: e.target.value }))
+                  }
                 />
               </div>
 
@@ -152,11 +202,18 @@ export default function Profile() {
                 <input
                   type="text"
                   value={form.avatarInitials}
-                  onChange={(e) => setForm((p) => ({ ...p, avatarInitials: e.target.value.toUpperCase().slice(0, 2) }))}
+                  onChange={(e) =>
+                    setForm((p) => ({
+                      ...p,
+                      avatarInitials: e.target.value.toUpperCase().slice(0, 2),
+                    }))
+                  }
                   placeholder="e.g. AS"
                   style={{ fontFamily: "'DM Mono', monospace" }}
                 />
-                <p style={{ fontSize: 12, color: "var(--text3)", marginTop: 4 }}>
+                <p
+                  style={{ fontSize: 12, color: "var(--text3)", marginTop: 4 }}
+                >
                   Leave empty to use your name initials.
                 </p>
               </div>
@@ -164,7 +221,14 @@ export default function Profile() {
 
             {/* Financial settings */}
             <div style={{ marginBottom: 8 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text2)", marginBottom: 10 }}>
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--text2)",
+                  marginBottom: 10,
+                }}
+              >
                 Financial settings
               </p>
 
@@ -175,7 +239,9 @@ export default function Profile() {
                   min="0"
                   placeholder="e.g. 50000"
                   value={form.monthlyIncome}
-                  onChange={(e) => setForm((p) => ({ ...p, monthlyIncome: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, monthlyIncome: e.target.value }))
+                  }
                   style={{ fontFamily: "'DM Mono', monospace" }}
                 />
               </div>
@@ -187,10 +253,17 @@ export default function Profile() {
                   min="0"
                   placeholder="e.g. 15000"
                   value={form.monthlySavingsGoal}
-                  onChange={(e) => setForm((p) => ({ ...p, monthlySavingsGoal: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({
+                      ...p,
+                      monthlySavingsGoal: e.target.value,
+                    }))
+                  }
                   style={{ fontFamily: "'DM Mono', monospace" }}
                 />
-                <p style={{ fontSize: 12, color: "var(--text3)", marginTop: 4 }}>
+                <p
+                  style={{ fontSize: 12, color: "var(--text3)", marginTop: 4 }}
+                >
                   Used for your savings goal (stored on the server).
                 </p>
               </div>
@@ -199,7 +272,9 @@ export default function Profile() {
                 <label>Preferred currency</label>
                 <select
                   value={form.currency}
-                  onChange={(e) => setForm((p) => ({ ...p, currency: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, currency: e.target.value }))
+                  }
                 >
                   {CURRENCIES.map((c) => (
                     <option key={c.code} value={c.code}>
@@ -211,10 +286,18 @@ export default function Profile() {
             </div>
 
             <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-              <button type="button" className="btn btn-ghost" onClick={() => setEditing(false)}>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setEditing(false)}
+              >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary" disabled={saving}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={saving}
+              >
                 {saving ? "Saving..." : "Save changes"}
               </button>
             </div>
@@ -222,41 +305,62 @@ export default function Profile() {
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             <div style={{ marginBottom: 12 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text2)", marginBottom: 10 }}>
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--text2)",
+                  marginBottom: 10,
+                }}
+              >
                 Profile info
               </p>
               <ProfileRow label="Email" value={user?.email} />
             </div>
 
             <div style={{ marginBottom: 4 }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text2)", marginBottom: 10 }}>
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--text2)",
+                  marginBottom: 10,
+                }}
+              >
                 Financial settings
               </p>
               <ProfileRow
                 label="Preferred currency"
-                value={CURRENCIES.find((c) => c.code === user?.currency)?.name || user?.currency}
+                value={
+                  CURRENCIES.find((c) => c.code === user?.currency)?.name ||
+                  user?.currency
+                }
               />
               <ProfileRow
                 label="Monthly income"
                 value={
-                  (user?.monthlyIncome || form.monthlyIncome)
+                  user?.monthlyIncome || form.monthlyIncome
                     ? new Intl.NumberFormat("en-IN", {
-                      style: "currency",
-                      currency: user?.currency || "INR",
-                      maximumFractionDigits: 0,
-                    }).format(Number(user?.monthlyIncome || form.monthlyIncome))
+                        style: "currency",
+                        currency: user?.currency || "INR",
+                        maximumFractionDigits: 0,
+                      }).format(
+                        Number(user?.monthlyIncome || form.monthlyIncome),
+                      )
                     : "Not set"
                 }
               />
               <ProfileRow
                 label="Monthly savings goal"
-                value={(user?.savingsGoal || user?.monthlyIncomeGoal)
-                  ? new Intl.NumberFormat("en-IN", {
-                    style: "currency",
-                    currency: user?.currency || "INR",
-                    maximumFractionDigits: 0,
-                  }).format(user?.savingsGoal || user?.monthlyIncomeGoal)
-                  : "Not set"}
+                value={
+                  user?.savingsGoal || user?.monthlyIncomeGoal
+                    ? new Intl.NumberFormat("en-IN", {
+                        style: "currency",
+                        currency: user?.currency || "INR",
+                        maximumFractionDigits: 0,
+                      }).format(user?.savingsGoal || user?.monthlyIncomeGoal)
+                    : "Not set"
+                }
               />
             </div>
           </div>
@@ -265,36 +369,63 @@ export default function Profile() {
 
       {/* Success toast */}
       {saved && (
-        <div style={{
-          background: "var(--green-dim)", border: "1px solid rgba(34,201,135,0.25)",
-          borderRadius: "var(--r-md)", padding: "12px 16px",
-          color: "var(--green)", fontSize: 13, fontWeight: 500,
-          display: "flex", alignItems: "center", gap: 8, marginBottom: 16,
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <polyline points="20 6 9 17 4 12"/>
+        <div
+          style={{
+            background: "var(--green-dim)",
+            border: "1px solid rgba(34,201,135,0.25)",
+            borderRadius: "var(--r-md)",
+            padding: "12px 16px",
+            color: "var(--green)",
+            fontSize: 13,
+            fontWeight: 500,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 16,
+          }}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+          >
+            <polyline points="20 6 9 17 4 12" />
           </svg>
           Profile updated successfully
         </div>
       )}
-
-      {/* No internal MongoDB details here — only user-facing settings. */}
+      {}
     </div>
   );
 }
 
 function ProfileRow({ label, value, mono }) {
   return (
-    <div style={{
-      display: "flex", justifyContent: "space-between", alignItems: "center",
-      padding: "11px 0", borderBottom: "1px solid var(--border)",
-    }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "11px 0",
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
       <span style={{ fontSize: 13, color: "var(--text3)" }}>{label}</span>
-      <span style={{
-        fontSize: 13, color: "var(--text)", fontWeight: 500,
-        fontFamily: mono ? "'DM Mono', monospace" : "inherit",
-        maxWidth: "60%", overflow: "hidden", textOverflow: "ellipsis", textAlign: "right",
-      }}>
+      <span
+        style={{
+          fontSize: 13,
+          color: "var(--text)",
+          fontWeight: 500,
+          fontFamily: mono ? "'DM Mono', monospace" : "inherit",
+          maxWidth: "60%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          textAlign: "right",
+        }}
+      >
         {value || "—"}
       </span>
     </div>

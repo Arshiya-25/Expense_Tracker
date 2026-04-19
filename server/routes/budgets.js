@@ -8,7 +8,6 @@ const protect = require("../middleware/auth");
 
 router.use(protect);
 
-// GET /api/budgets?month=3&year=2026 — get budgets with actual spending
 router.get("/", async (req, res) => {
   try {
     const month = parseInt(req.query.month) || new Date().getMonth() + 1;
@@ -22,7 +21,9 @@ router.get("/", async (req, res) => {
     });
 
     // Get actual spending per category for this month
-    const userId = require("mongoose").Types.ObjectId.createFromHexString(req.userId);
+    const userId = require("mongoose").Types.ObjectId.createFromHexString(
+      req.userId,
+    );
     const spending = await Transaction.aggregate([
       {
         $match: {
@@ -67,7 +68,7 @@ router.post("/", async (req, res) => {
     const budget = await Budget.findOneAndUpdate(
       { userId: req.userId, category, month: month - 1, year },
       { limit },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
 
     res.json(budget);

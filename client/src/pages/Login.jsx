@@ -1,7 +1,3 @@
-// src/pages/Login.jsx
-// useNavigate() = programmatic navigation (after login, go to dashboard)
-// useAuth() = our custom hook to call the login function and store the user
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -163,20 +159,40 @@ export default function Login() {
           <div className="login-card">
             {/* Logo + heading */}
             <div style={{ textAlign: "center", marginBottom: 30 }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 14, background: "var(--accent)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                margin: "0 auto 16px",
-              }}>
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 14,
+                  background: "var(--accent)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 16px",
+                }}
+              >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
                   <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
                 </svg>
               </div>
 
-              <h1 style={{ fontSize: 26, fontWeight: 650, letterSpacing: "-0.03em" }}>
+              <h1
+                style={{
+                  fontSize: 26,
+                  fontWeight: 650,
+                  letterSpacing: "-0.03em",
+                }}
+              >
                 Welcome back
               </h1>
-              <p style={{ color: "var(--text3)", fontSize: 14, marginTop: 6, lineHeight: 1.6 }}>
+              <p
+                style={{
+                  color: "var(--text3)",
+                  fontSize: 14,
+                  marginTop: 6,
+                  lineHeight: 1.6,
+                }}
+              >
                 Sign in to keep your spending on track.
               </p>
             </div>
@@ -189,7 +205,9 @@ export default function Login() {
                   type="email"
                   placeholder="you@example.com"
                   value={form.email}
-                  onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, email: e.target.value }))
+                  }
                   autoFocus
                 />
               </div>
@@ -200,20 +218,24 @@ export default function Login() {
                   type="password"
                   placeholder="••••••••"
                   value={form.password}
-                  onChange={(e) => setForm((p) => ({ ...p, password: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, password: e.target.value }))
+                  }
                 />
               </div>
 
               {error && (
-                <div style={{
-                  background: "var(--red-dim)",
-                  border: "1px solid rgba(240,92,110,0.25)",
-                  borderRadius: "var(--r-md)",
-                  padding: "10px 14px",
-                  color: "var(--red)",
-                  fontSize: 13,
-                  marginBottom: 16,
-                }}>
+                <div
+                  style={{
+                    background: "var(--red-dim)",
+                    border: "1px solid rgba(240,92,110,0.25)",
+                    borderRadius: "var(--r-md)",
+                    padding: "10px 14px",
+                    color: "var(--red)",
+                    fontSize: 13,
+                    marginBottom: 16,
+                  }}
+                >
                   {error}
                 </div>
               )}
@@ -222,16 +244,32 @@ export default function Login() {
                 type="submit"
                 className="btn btn-primary"
                 disabled={loading}
-                style={{ width: "100%", justifyContent: "center", height: 42, marginTop: 4 }}
+                style={{
+                  width: "100%",
+                  justifyContent: "center",
+                  height: 42,
+                  marginTop: 4,
+                }}
               >
                 {loading ? "Signing in..." : "Sign in"}
               </button>
 
-              <p style={{ textAlign: "center", marginTop: 18, fontSize: 14, color: "var(--text3)" }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: 18,
+                  fontSize: 14,
+                  color: "var(--text3)",
+                }}
+              >
                 No account?{" "}
                 <Link
                   to="/register"
-                  style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 550 }}
+                  style={{
+                    color: "var(--accent)",
+                    textDecoration: "none",
+                    fontWeight: 550,
+                  }}
                 >
                   Create one
                 </Link>
@@ -245,23 +283,46 @@ export default function Login() {
           <div className="login-hero">
             <div className="login-pill">
               <span style={{ color: "var(--accent)" }}>FinFlow</span>
-              <span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--border2)" }} />
-              <span style={{ color: "var(--text2)", fontWeight: 600 }}>Premium, minimal, useful</span>
+              <span
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: "50%",
+                  background: "var(--border2)",
+                }}
+              />
+              <span style={{ color: "var(--text2)", fontWeight: 600 }}>
+                Premium, minimal, useful
+              </span>
             </div>
 
             <div className="login-hero-title">Track smarter. Spend better.</div>
             <div className="login-hero-sub">
-              A clean expense tracker with quick insights, category budgets, and a calmer way to see where your money goes.
+              A clean expense tracker with quick insights, category budgets, and
+              a calmer way to see where your money goes.
             </div>
 
             {/* Simple “product” graphic (purely decorative). */}
             <div className="login-right-graphic">
-              <svg width="100%" height="100%" viewBox="0 0 520 220" preserveAspectRatio="none">
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 520 220"
+                preserveAspectRatio="none"
+              >
                 <defs>
                   <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.55" />
+                    <stop
+                      offset="0%"
+                      stopColor="var(--accent)"
+                      stopOpacity="0.55"
+                    />
                     <stop offset="55%" stopColor="#22c987" stopOpacity="0.30" />
-                    <stop offset="100%" stopColor="#f05c6e" stopOpacity="0.22" />
+                    <stop
+                      offset="100%"
+                      stopColor="#f05c6e"
+                      stopOpacity="0.22"
+                    />
                   </linearGradient>
                   <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0">
                     <stop offset="0%" stopColor="white" stopOpacity="0.08" />
@@ -314,7 +375,13 @@ export default function Login() {
                 ].map((p, idx) => (
                   <g key={idx}>
                     <circle cx={p.x} cy={p.y} r="6" fill={p.c} opacity="0.18" />
-                    <circle cx={p.x} cy={p.y} r="3.2" fill={p.c} opacity="0.85" />
+                    <circle
+                      cx={p.x}
+                      cy={p.y}
+                      r="3.2"
+                      fill={p.c}
+                      opacity="0.85"
+                    />
                   </g>
                 ))}
               </svg>
