@@ -1,88 +1,37 @@
-// NavLink from react-router-dom adds an "active" class automatically when the URL matches
-// This is how the active sidebar item gets highlighted — no manual tracking needed
-
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { 
+  LayoutDashboard, 
+  ArrowLeftRight, 
+  PieChart, 
+  User, 
+  Moon, 
+  Sun, 
+  LogOut, 
+  TrendingUp 
+} from "lucide-react";
 
 const NAV_ITEMS = [
   {
     to: "/",
     label: "Dashboard",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-      </svg>
-    ),
+    icon: <LayoutDashboard size={18} />,
   },
   {
     to: "/transactions",
     label: "Transactions",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M7 16V4m0 0L3 8m4-4l4 4" />
-        <path d="M17 8v12m0 0l4-4m-4 4l-4-4" />
-      </svg>
-    ),
+    icon: <ArrowLeftRight size={18} />,
   },
   {
     to: "/budgets",
     label: "Budgets",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 6v6l4 2" />
-      </svg>
-    ),
+    icon: <PieChart size={18} />,
   },
   {
     to: "/profile",
     label: "Profile",
-    icon: (
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-      </svg>
-    ),
+    icon: <User size={18} />,
   },
 ];
 
@@ -136,7 +85,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div
         style={{
-          padding: "0 8px 28px",
+          padding: "0 8px 24px",
           display: "flex",
           alignItems: "center",
           gap: 10,
@@ -147,18 +96,23 @@ export default function Sidebar() {
             width: 32,
             height: 32,
             borderRadius: 8,
-            background: "var(--accent)",
+            background: "linear-gradient(135deg, var(--primary) 0%, var(--highlight) 100%)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            color: "#050816",
           }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" />
-          </svg>
+          <TrendingUp size={18} strokeWidth={2.5} />
         </div>
         <span
-          style={{ fontWeight: 600, fontSize: 16, letterSpacing: "-0.02em" }}
+          style={{ 
+            fontFamily: "var(--font-heading)",
+            fontWeight: 700, 
+            fontSize: 16, 
+            letterSpacing: "-0.03em",
+            color: "var(--text)"
+          }}
         >
           FinFlow
         </span>
@@ -166,65 +120,30 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav
-        style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}
+        style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}
       >
         <p
           style={{
-            fontSize: 11,
+            fontSize: 10,
             color: "var(--text3)",
-            fontWeight: 500,
-            letterSpacing: "0.06em",
+            fontWeight: 600,
+            letterSpacing: "0.08em",
             textTransform: "uppercase",
-            padding: "0 8px",
-            marginBottom: 8,
+            padding: "0 16px",
+            marginBottom: 4,
           }}
         >
-          MENU
+          Menu
         </p>
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === "/"} // "end" means only match exact "/" not "/transactions"
-            style={({ isActive }) => ({
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "10px 12px",
-              borderRadius: "var(--r-md)",
-              textDecoration: "none",
-              fontSize: 14,
-              fontWeight: isActive ? 500 : 400,
-              color: isActive ? "var(--text)" : "var(--text2)",
-              background: isActive ? "var(--surface)" : "transparent",
-              border: isActive
-                ? "1px solid var(--border)"
-                : "1px solid transparent",
-              transition: "all 0.15s",
-            })}
+            end={item.to === "/"}
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
           >
-            {({ isActive }) => (
-              <>
-                <span
-                  style={{ color: isActive ? "var(--accent)" : "currentColor" }}
-                >
-                  {item.icon}
-                </span>
-                {item.label}
-                {/* Active dot */}
-                {isActive && (
-                  <span
-                    style={{
-                      marginLeft: "auto",
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      background: "var(--accent)",
-                    }}
-                  />
-                )}
-              </>
-            )}
+            <span className="sidebar-icon">{item.icon}</span>
+            <span>{item.label}</span>
           </NavLink>
         ))}
       </nav>
@@ -250,20 +169,21 @@ export default function Sidebar() {
             justifyContent: "space-between",
             gap: 8,
             padding: "10px 12px",
-            borderRadius: "var(--r-md)",
+            borderRadius: "var(--radius-md)",
             background: "transparent",
             border: "1px solid var(--border)",
             color: "var(--text2)",
             fontSize: 13,
             cursor: "pointer",
             width: "100%",
+            transition: "all var(--transition-fast)",
           }}
         >
           <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span>{theme === "dark" ? "🌙" : "☀️"}</span>
-            {theme === "dark" ? "Dark mode" : "Light mode"}
+            {theme === "dark" ? <Moon size={15} /> : <Sun size={15} />}
+            <span>{theme === "dark" ? "Dark mode" : "Light mode"}</span>
           </span>
-          <span style={{ fontSize: 11, color: "var(--text3)" }}>
+          <span style={{ fontSize: 11, color: "var(--text3)", fontWeight: 500 }}>
             {theme === "dark" ? "On" : "Off"}
           </span>
         </button>
@@ -276,13 +196,13 @@ export default function Sidebar() {
               alignItems: "center",
               gap: 10,
               padding: "10px 12px",
-              borderRadius: "var(--r-md)",
+              borderRadius: "var(--radius-md)",
               cursor: "pointer",
-              transition: "background 0.15s",
+              transition: "background var(--transition-fast)",
               background: "transparent",
             }}
             onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "var(--surface)")
+              (e.currentTarget.style.background = "rgba(255,255,255,0.02)")
             }
             onMouseLeave={(e) =>
               (e.currentTarget.style.background = "transparent")
@@ -294,13 +214,13 @@ export default function Sidebar() {
                 width: 34,
                 height: 34,
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, var(--accent), #a78bfa)",
+                background: "linear-gradient(135deg, var(--primary), var(--highlight))",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 13,
                 fontWeight: 600,
-                color: "white",
+                color: "#050816",
                 flexShrink: 0,
               }}
             >
@@ -315,6 +235,7 @@ export default function Sidebar() {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  margin: 0,
                 }}
               >
                 {user?.name || "User"}
@@ -326,6 +247,7 @@ export default function Sidebar() {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  margin: "2px 0 0",
                 }}
               >
                 {user?.email}
@@ -341,15 +263,15 @@ export default function Sidebar() {
             display: "flex",
             alignItems: "center",
             gap: 8,
-            padding: "8px 12px",
-            borderRadius: "var(--r-md)",
+            padding: "10px 12px",
+            borderRadius: "var(--radius-md)",
             background: "transparent",
             border: "none",
             color: "var(--text3)",
             fontSize: 13,
             cursor: "pointer",
             width: "100%",
-            transition: "all 0.15s",
+            transition: "all var(--transition-fast)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "var(--red)";
@@ -360,21 +282,8 @@ export default function Sidebar() {
             e.currentTarget.style.background = "transparent";
           }}
         >
-          <svg
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-          Sign out
+          <LogOut size={15} />
+          <span>Sign out</span>
         </button>
       </div>
     </aside>

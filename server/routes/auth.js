@@ -70,6 +70,39 @@ router.post("/login", async (req, res) => {
         savingsGoal: user.savingsGoal,
         monthlyIncomeGoal: user.monthlyIncomeGoal,
         goals: user.goals,
+        isDemo: user.isDemo || false,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/auth/demo — Auto-login for pre-seeded demo account
+router.post("/demo", async (req, res) => {
+  try {
+    const email = "demo@finflow.com";
+    let user = await User.findOne({ email });
+    if (!user) {
+      // Seed if not exists
+      const { resetDemoUser } = require("../utils/demoSeeder");
+      await resetDemoUser();
+      user = await User.findOne({ email });
+    }
+
+    res.json({
+      token: generateToken(user._id),
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        currency: user.currency,
+        avatar: user.avatar,
+        monthlyIncome: user.monthlyIncome,
+        savingsGoal: user.savingsGoal,
+        monthlyIncomeGoal: user.monthlyIncomeGoal,
+        goals: user.goals,
+        isDemo: true,
       },
     });
   } catch (err) {
@@ -101,6 +134,21 @@ router.patch("/profile", async (req, res) => {
     const token = authHeader?.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // Fetch user to check if they are the demo user
+    const dbUser = await User.findById(decoded.id);
+    if (dbUser && dbUser.isDemo) {
+      // Reject changes to name, currency, and financial setup limits for demo user
+      if (
+        req.body.name !== undefined ||
+        req.body.currency !== undefined ||
+        req.body.monthlyIncome !== undefined ||
+        req.body.savingsGoal !== undefined ||
+        req.body.monthlyIncomeGoal !== undefined
+      ) {
+        return res.status(403).json({ message: "Profile settings cannot be modified in Demo Mode" });
+      }
+    }
+
     const updates = {};
     if (req.body.name) updates.name = req.body.name;
     if (req.body.currency) updates.currency = req.body.currency;
@@ -111,6 +159,8 @@ router.patch("/profile", async (req, res) => {
     if (req.body.monthlyIncomeGoal !== undefined)
       updates.monthlyIncomeGoal = req.body.monthlyIncomeGoal;
     if (req.body.goals !== undefined) updates.goals = req.body.goals;
+    if (req.body.reminders !== undefined) updates.reminders = req.body.reminders;
+    if (req.body.categoryPreferences !== undefined) updates.categoryPreferences = req.body.categoryPreferences;
 
     const user = await User.findByIdAndUpdate(decoded.id, updates, {
       new: true,

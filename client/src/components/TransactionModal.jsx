@@ -263,7 +263,7 @@ export default function TransactionModal({ onClose, onSave, existing }) {
             <input
               name="description"
               type="text"
-              placeholder="e.g. Lunch at Haldiram's"
+              placeholder="e.g. Lunch at Cafe"
               value={form.description}
               onChange={handleChange}
             />

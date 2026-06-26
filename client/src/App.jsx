@@ -48,25 +48,52 @@ function AppLoader() {
 }
 
 function AppLayout({ children }) {
+  const { user } = useAuth();
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       <Sidebar />
-      <main
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          background: "var(--bg)",
-          padding: "32px 36px",
-        }}
-      >
-        {children}
-      </main>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+        {user?.isDemo && (
+          <div
+            style={{
+              background: "rgba(168, 107, 255, 0.12)",
+              borderBottom: "1px solid rgba(168, 107, 255, 0.25)",
+              padding: "10px 24px",
+              color: "var(--text)",
+              fontSize: "13px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              zIndex: 100,
+              textAlign: "center",
+              backdropFilter: "blur(8px)",
+              animation: "slideDown 0.3s ease-out",
+            }}
+          >
+            <span style={{ fontWeight: 600, color: "var(--primary)" }}>Demo Mode:</span>
+            <span>You are logged in as a Demo User. Profile changes are disabled, but you can add transactions, goals, budgets, and reminders to test the app.</span>
+          </div>
+        )}
+        <main
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            background: "var(--bg)",
+            padding: "32px 36px",
+          }}
+        >
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
 
+import Landing from "./pages/Landing"; // Import the landing page
+
 export default function App() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Read the authentication state from context
 
   return (
     <Routes>
@@ -80,15 +107,17 @@ export default function App() {
         element={user ? <Navigate to="/" replace /> : <Register />}
       />
 
-      {/* Protected routes — all share the AppLayout (sidebar) */}
+      {/* Landing page or Dashboard route */}
       <Route
         path="/"
         element={
-          <ProtectedRoute>
+          user ? (
             <AppLayout>
               <Dashboard />
             </AppLayout>
-          </ProtectedRoute>
+          ) : (
+            <Landing />
+          )
         }
       />
       <Route

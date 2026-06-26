@@ -3,28 +3,44 @@ import { format } from "date-fns";
 import { getTransactions, deleteTransaction } from "../api";
 import { useAuth } from "../context/AuthContext";
 import TransactionModal from "../components/TransactionModal";
+import { formatCurrency } from "../utils/formatters";
+import { 
+  Plus, 
+  Search, 
+  Edit2, 
+  Trash2, 
+  Utensils, 
+  Car, 
+  ShoppingBag, 
+  Film, 
+  Zap, 
+  Heart, 
+  GraduationCap, 
+  Tag, 
+  Briefcase, 
+  Laptop, 
+  Building, 
+  TrendingUp, 
+  Gift, 
+  CreditCard 
+} from "lucide-react";
 
-const fmt = (amount, currency = "INR") =>
-  new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
+const fmt = (amount, currency = "INR") => formatCurrency(amount, currency);
 
 const CATEGORY_ICONS = {
-  Food: "🍜",
-  Transport: "🚗",
-  Shopping: "🛍️",
-  Entertainment: "🎬",
-  Utilities: "⚡",
-  Health: "💊",
-  Education: "📚",
-  Other: "📌",
-  Salary: "💼",
-  Freelance: "💻",
-  Business: "🏢",
-  Investment: "📈",
-  Gift: "🎁",
+  Food: <Utensils size={14} />,
+  Transport: <Car size={14} />,
+  Shopping: <ShoppingBag size={14} />,
+  Entertainment: <Film size={14} />,
+  Utilities: <Zap size={14} />,
+  Health: <Heart size={14} />,
+  Education: <GraduationCap size={14} />,
+  Other: <Tag size={14} />,
+  Salary: <Briefcase size={14} />,
+  Freelance: <Laptop size={14} />,
+  Business: <Building size={14} />,
+  Investment: <TrendingUp size={14} />,
+  Gift: <Gift size={14} />,
 };
 
 export default function Transactions() {
@@ -129,11 +145,11 @@ export default function Transactions() {
       >
         <div>
           <h1
-            style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}
+            style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em" }}
           >
             Transactions
           </h1>
-          <p style={{ color: "var(--text3)", fontSize: 14, marginTop: 2 }}>
+          <p style={{ color: "var(--text3)", fontSize: 13, marginTop: 4 }}>
             {filtered.length} transactions · {fmt(totalIncome, user?.currency)}{" "}
             in · {fmt(totalExpense, user?.currency)} out
           </p>
@@ -145,17 +161,7 @@ export default function Transactions() {
             setShowModal(true);
           }}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <Plus size={16} />
           Add transaction
         </button>
       </div>
@@ -166,13 +172,8 @@ export default function Transactions() {
       >
         {/* Search */}
         <div style={{ position: "relative", flex: 1, minWidth: 180 }}>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+          <Search
+            size={14}
             style={{
               position: "absolute",
               left: 12,
@@ -181,10 +182,7 @@ export default function Transactions() {
               color: "var(--text3)",
               pointerEvents: "none",
             }}
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
+          />
           <input
             placeholder="Search transactions..."
             value={search}
@@ -314,13 +312,13 @@ export default function Transactions() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 14,
+                    color: tx.type === "income" ? "var(--green)" : "var(--red)",
                   }}
                 >
-                  {CATEGORY_ICONS[tx.category] || "💳"}
+                  {CATEGORY_ICONS[tx.category] || <CreditCard size={14} />}
                 </div>
                 <div>
-                  <p style={{ fontSize: 13, fontWeight: 500 }}>
+                  <p style={{ fontSize: 13, fontWeight: 500, margin: 0 }}>
                     {tx.description || tx.category}
                   </p>
                   {tx.isRecurring && (
@@ -332,6 +330,8 @@ export default function Transactions() {
                         padding: "2px 6px",
                         borderRadius: 4,
                         fontWeight: 500,
+                        display: "inline-block",
+                        marginTop: 4,
                       }}
                     >
                       recurring
@@ -356,7 +356,7 @@ export default function Transactions() {
                   fontSize: 14,
                   fontWeight: 600,
                   textAlign: "right",
-                  fontFamily: "'DM Mono', monospace",
+                  fontFamily: "var(--font-heading)",
                   letterSpacing: "-0.02em",
                   color: tx.type === "income" ? "var(--green)" : "var(--red)",
                 }}
@@ -376,37 +376,14 @@ export default function Transactions() {
                   }}
                   title="Edit"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
+                  <Edit2 size={14} />
                 </ActionBtn>
                 <ActionBtn
                   onClick={() => handleDelete(tx._id)}
                   title="Delete"
                   danger
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6l-1 14H6L5 6" />
-                    <path d="M10 11v6" />
-                    <path d="M14 11v6" />
-                    <path d="M9 6V4h6v2" />
-                  </svg>
+                  <Trash2 size={14} />
                 </ActionBtn>
               </div>
             </div>

@@ -111,12 +111,13 @@ export default function Register() {
         .reg-hero-title { font-size: 32px; font-weight: 750; letter-spacing: -0.04em; margin-bottom: 10px; }
         .reg-hero-sub { color: var(--text2); font-size: 14px; line-height: 1.7; margin-bottom: 18px; max-width: 460px; }
         .reg-graphic {
+          margin-top: 16px;
           width: 100%;
           max-width: 520px;
           height: 220px;
           border-radius: var(--r-xl);
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.10);
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.10);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
           display: flex;
@@ -307,7 +308,6 @@ export default function Register() {
             </div>
 
             <div className="reg-graphic">
-              {/* purely decorative */}
               <svg
                 width="100%"
                 height="100%"
@@ -315,7 +315,7 @@ export default function Register() {
                 preserveAspectRatio="none"
               >
                 <defs>
-                  <linearGradient id="r1" x1="0" y1="0" x2="1" y2="1">
+                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
                     <stop
                       offset="0%"
                       stopColor="var(--accent)"
@@ -328,12 +328,14 @@ export default function Register() {
                       stopOpacity="0.22"
                     />
                   </linearGradient>
-                  <linearGradient id="r2" x1="0" y1="1" x2="1" y2="0">
+                  <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0">
                     <stop offset="0%" stopColor="white" stopOpacity="0.08" />
                     <stop offset="100%" stopColor="white" stopOpacity="0.02" />
                   </linearGradient>
                 </defs>
-                <rect x="0" y="0" width="520" height="220" fill="url(#r2)" />
+
+                {/* Background grid */}
+                <rect x="0" y="0" width="520" height="220" fill="url(#g2)" />
                 {Array.from({ length: 10 }).map((_, i) => (
                   <line
                     key={i}
@@ -345,15 +347,47 @@ export default function Register() {
                     strokeWidth="1"
                   />
                 ))}
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <line
+                    key={i + 20}
+                    x1={0}
+                    y1={i * 44}
+                    x2={520}
+                    y2={i * 44}
+                    stroke="rgba(255,255,255,0.05)"
+                    strokeWidth="1"
+                  />
+                ))}
+
+                {/* Decorative “chart” path */}
                 <path
-                  d="M25 170 C 110 130, 160 190, 210 150
-                     C 270 104, 310 170, 360 140
-                     C 420 112, 455 150, 495 95"
+                  d="M25 160 C 95 120, 130 180, 185 145
+                     C 245 106, 275 170, 335 130
+                     C 395 92, 430 135, 495 80"
                   fill="none"
-                  stroke="url(#r1)"
+                  stroke="url(#g1)"
                   strokeWidth="3"
                   strokeLinecap="round"
                 />
+
+                {/* Dots */}
+                {[
+                  { x: 25, y: 160, c: "var(--accent)" },
+                  { x: 185, y: 145, c: "#22c987" },
+                  { x: 335, y: 130, c: "#f05c6e" },
+                  { x: 495, y: 80, c: "var(--accent)" },
+                ].map((p, idx) => (
+                  <g key={idx}>
+                    <circle cx={p.x} cy={p.y} r="6" fill={p.c} opacity="0.18" />
+                    <circle
+                      cx={p.x}
+                      cy={p.y}
+                      r="3.2"
+                      fill={p.c}
+                      opacity="0.85"
+                    />
+                  </g>
+                ))}
               </svg>
             </div>
           </div>

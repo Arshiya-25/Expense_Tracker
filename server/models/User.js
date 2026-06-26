@@ -57,9 +57,46 @@ const UserSchema = new mongoose.Schema(
             type: Number,
             default: 0,
           },
+          deadline: {
+            type: Date,
+            default: null,
+          },
         },
       ],
       default: [], // keeps old users safe
+    },
+    reminders: {
+      type: [
+        {
+          title: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+          amount: {
+            type: Number,
+            required: true,
+          },
+          dueDate: {
+            type: Date,
+            required: true,
+          },
+          type: {
+            type: String,
+            enum: ["bill", "subscription", "custom"],
+            default: "custom",
+          },
+        },
+      ],
+      default: [], // keeps old users safe
+    },
+    categoryPreferences: {
+      type: [String],
+      default: [],
+    },
+    isDemo: {
+      type: Boolean,
+      default: false,
     },
   },
   {

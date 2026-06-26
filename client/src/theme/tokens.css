@@ -1,0 +1,114 @@
+/* Design system tokens for FinFlow - Editorial Premium Design */
+
+:root {
+  /* Spacing system (8pt grid, reduced ~16-20%) */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 20px;
+  --space-xl: 28px;
+  --space-2xl: 40px;
+  --space-3xl: 52px;
+
+  /* Corner Radius (16px to 20px radius as requested) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family: var(--font-body);
+  --font-mono: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Shadows (glassmorphism soft shadows) */
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.12);
+
+  /* Transition timings */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Dark mode (default - dark first design) */
+body, body[data-theme="dark"] {
+  --bg: #050816;
+  --bg2: #09122A;
+  --bg3: #0e1228;
+  --surface: rgba(14, 18, 40, 0.75);
+  --surface2: rgba(14, 18, 40, 0.9);
+  
+  --primary: #A86BFF;
+  --accent: #37C6D9;
+  --highlight: #FF6BCB;
+  --secondary: #5D7BFF;
+
+  --border: rgba(255, 255, 255, 0.06);
+  --border2: rgba(255, 255, 255, 0.12);
+  
+  --text: #F6F6F8;
+  --text-rgb: 246, 246, 248;
+  --text2: #B8B8C8;
+  --text3: #626784;
+
+  /* Semantic Colors */
+  --accent-color: var(--primary);
+  --green: #8FF8A1;
+  --green-dim: rgba(143, 248, 161, 0.08);
+  --red: #FF8CA8;
+  --red-dim: rgba(255, 140, 168, 0.08);
+  --amber: #E9F28B;
+  --amber-dim: rgba(233, 242, 139, 0.08);
+
+  /* Calendar icon filter dark mode */
+  --calendar-icon-filter: invert(1);
+
+  /* Glows */
+  --glow-1: rgba(93, 123, 255, 0.08); /* blue */
+  --glow-2: rgba(168, 107, 255, 0.08); /* purple */
+  --glow-3: rgba(255, 107, 203, 0.08); /* pink */
+}
+
+/* Light mode */
+body[data-theme="light"] {
+  --bg: #F7F7FB;
+  --bg2: #F1F0F8;
+  --bg3: #F9F9FC;
+  --surface: #FFFFFF;
+  --surface2: #FAF9FD;
+
+  --primary: #9B7BFF;
+  --accent: #5D7BFF;
+  --highlight: #FF79C8;
+  --secondary: #D7B8FF;
+
+  --border: rgba(0, 0, 0, 0.05);
+  --border2: rgba(0, 0, 0, 0.10);
+
+  --text: #141626;
+  --text-rgb: 20, 22, 38;
+  --text2: #5A5D75;
+  --text3: #9093A6;
+
+  /* Semantic Colors */
+  --accent-color: var(--primary);
+  --green: #2e7d32;
+  --green-dim: rgba(46, 125, 50, 0.08);
+  --red: #c62828;
+  --red-dim: rgba(198, 40, 40, 0.08);
+  --amber: #FF79C8;
+  --amber-dim: rgba(255, 121, 200, 0.08);
+
+  /* Calendar icon filter light mode */
+  --calendar-icon-filter: none;
+
+  /* Glows */
+  --glow-1: rgba(93, 123, 255, 0.06);
+  --glow-2: rgba(255, 230, 242, 0.06);
+  --glow-3: rgba(155, 123, 255, 0.04);
+}
