@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getBudgets, setBudget, deleteBudget } from "../api";
 import { useAuth } from "../context/AuthContext";
-import { formatCurrency } from "../utils/formatters";
+import { formatCurrency, getBudgetStatus } from "../utils/formatters";
 import {
   Plus,
   X,
@@ -279,11 +279,8 @@ export default function Budgets() {
             const pct = Math.min(budget.percentage, 100);
             const isOver = budget.percentage >= 100;
             const isWarning = budget.percentage >= 80 && !isOver;
-            const barColor = isOver
-              ? "var(--red)"
-              : isWarning
-                ? "var(--amber)"
-                : "var(--primary)";
+            const statusInfo = getBudgetStatus(budget.percentage);
+            const barColor = statusInfo.barColor;
 
             return (
               <div key={budget._id} className="card">
@@ -302,7 +299,7 @@ export default function Budgets() {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        color: isOver ? "var(--red)" : "var(--primary)",
+                        color: statusInfo.color,
                       }}
                     >
                       {CATEGORY_ICONS[budget.category] || (
@@ -331,12 +328,12 @@ export default function Budgets() {
                   >
                     {/* Status badge */}
                     <span
-                      className={`badge ${isOver ? "badge-expense" : isWarning ? "badge-warning" : ""}`}
+                      className={`badge ${statusInfo.badgeClass}`}
                       style={
-                        !isOver && !isWarning
+                        statusInfo.badgeClass === ""
                           ? {
-                              background: "rgba(168, 107, 255, 0.08)",
-                              color: "var(--primary)",
+                              background: statusInfo.badgeBg,
+                              color: statusInfo.badgeText,
                             }
                           : {}
                       }
@@ -369,18 +366,29 @@ export default function Budgets() {
                   />
                 </div>
 
-                {/* Remaining */}
-                <p
-                  style={{
-                    fontSize: 12,
-                    color: isOver ? "var(--red)" : "var(--text3)",
-                    marginTop: 8,
-                  }}
-                >
-                  {isOver
-                    ? `Over by ${fmt(budget.spent - budget.limit, user?.currency)}`
-                    : `${fmt(budget.limit - budget.spent, user?.currency)} remaining`}
-                </p>
+                {/* Remaining & Status */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: isOver ? "var(--red)" : "var(--text3)",
+                      margin: 0,
+                    }}
+                  >
+                    {isOver
+                      ? `Over by ${fmt(budget.spent - budget.limit, user?.currency)}`
+                      : `${fmt(budget.limit - budget.spent, user?.currency)} remaining`}
+                  </p>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: statusInfo.color,
+                    }}
+                  >
+                    {statusInfo.label}
+                  </span>
+                </div>
               </div>
             );
           })}

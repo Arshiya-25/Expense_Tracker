@@ -1,6 +1,7 @@
 // "Controlled" means every keystroke updates state, not the DOM directly
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { createTransaction, updateTransaction } from "../api";
 
 const EXPENSE_CATEGORIES = [
@@ -38,6 +39,20 @@ export default function TransactionModal({ onClose, onSave, existing }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({ amount: "", category: "" });
+
+  useEffect(() => {
+    // Lock background scrolling
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
+    };
+  }, []);
 
   // e.target.name must match the form state key
   const handleChange = (e) => {
@@ -111,9 +126,20 @@ export default function TransactionModal({ onClose, onSave, existing }) {
     form.type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
   const showCustomCategory = form.category === "Other";
 
-  return (
+  return createPortal(
     <div
-      className="modal-overlay"
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "rgba(0, 0, 0, 0.5)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+      }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="modal">
@@ -329,6 +355,7 @@ export default function TransactionModal({ onClose, onSave, existing }) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

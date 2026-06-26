@@ -1,12 +1,12 @@
 // Landing Page for FinFlow - Premium, Minimal, Editorial presentation
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { 
-  TrendingUp, 
-  BarChart3, 
-  Target, 
-  Clock, 
-  ArrowRight 
+import {
+  TrendingUp,
+  BarChart3,
+  Target,
+  Clock,
+  ArrowRight
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { demoLogin } from "../api";

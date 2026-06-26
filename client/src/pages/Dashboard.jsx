@@ -30,7 +30,7 @@ import { getBudgets, getTransactions, getSummary } from "../api";
 import { useAuth } from "../context/AuthContext";
 import TransactionModal from "../components/TransactionModal";
 import ErrorBoundary from "../components/ErrorBoundary"; // Import component-level error boundaries
-import { formatCurrency, formatDate, formatPercentage } from "../utils/formatters"; // Central utilities
+import { formatCurrency, formatDate, formatPercentage, getBudgetStatus, sortGoals } from "../utils/formatters"; // Central utilities
 
 // Map legacy fmt formatter to safe utility wrapper
 const fmt = (amount, currency = "INR") => formatCurrency(amount, currency);
@@ -135,12 +135,7 @@ export default function Dashboard() {
   const totalBudgeted = hasBudget ? budgets.reduce((s, b) => s + (b.limit || 0), 0) : 0;
   const totalBudgetSpent = hasBudget ? budgets.reduce((s, b) => s + (b.spent || 0), 0) : 0;
   const budgetPctUsed = totalBudgeted > 0 ? Math.round((totalBudgetSpent / totalBudgeted) * 100) : 0;
-  const budgetBarColor =
-    budgetPctUsed >= 100
-      ? "var(--negative)"
-      : budgetPctUsed >= 80
-        ? "var(--accent)"
-        : "var(--primary)";
+  const budgetBarColor = getBudgetStatus(budgetPctUsed).barColor;
 
   // Filter items based on user search query (dashboard search requirement)
   const filteredTransactions = transactions.filter((t) =>
@@ -148,7 +143,8 @@ export default function Dashboard() {
     (t.description && t.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const filteredGoals = (user?.goals || []).filter((g) =>
+  const sortedGoals = sortGoals(user?.goals || []);
+  const filteredGoals = sortedGoals.filter((g) =>
     g.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -598,13 +594,13 @@ function NotificationBell({ user, budgets }) {
       notifications.push({
         id: `budget-over-${b.category}`,
         type: "danger",
-        text: `Budget alert: Exceeded ${b.category} limit by ${pct - 100}%!`,
+        text: `Over Budget: Exceeded ${b.category} limit by ${pct - 100}%!`,
       });
-    } else if (pct >= 85) {
+    } else if (pct >= 80) {
       notifications.push({
         id: `budget-warning-${b.category}`,
         type: "warning",
-        text: `Budget warning: Used ${pct}% of ${b.category} allocation.`,
+        text: `Budget Warning: Used ${pct}% of ${b.category} allocation.`,
       });
     }
   });
@@ -911,25 +907,18 @@ function BudgetHeadroomCard({ budgets, currency }) {
               const remaining = limit - spent;
               const pct = limit > 0 ? (spent / limit) * 100 : 0;
 
-              // Color choices based on spending percentage
-              let barColor = "var(--primary)";
-              let textColor = "var(--text3)";
-              if (pct >= 100) {
-                barColor = "var(--red)";
-                textColor = "var(--red)";
-              } else if (pct >= 80) {
-                barColor = "var(--amber)";
-                textColor = "var(--amber)";
-              }
+              const statusInfo = getBudgetStatus(pct);
+              const barColor = statusInfo.barColor;
+              const textColor = statusInfo.color;
 
               // Insight line text
               let insightText = "";
               if (pct >= 100) {
-                insightText = "Over budget";
+                insightText = statusInfo.label;
               } else {
                 const divisor = daysLeft > 0 ? daysLeft : 1;
                 const safeSpend = Math.max(0, remaining) / divisor;
-                insightText = `${fmt(safeSpend, currency)}/day safe to spend · ${daysLeft} day${daysLeft !== 1 ? "s" : ""} left`;
+                insightText = `${statusInfo.label} · ${fmt(safeSpend, currency)}/day safe to spend · ${daysLeft} day${daysLeft !== 1 ? "s" : ""} left`;
               }
 
               return (

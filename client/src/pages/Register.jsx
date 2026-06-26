@@ -38,22 +38,62 @@ export default function Register() {
     <div
       style={{
         minHeight: "100vh",
-        background: "var(--bg)",
+        background: "#050816",
+        color: "#F6F6F8",
         display: "flex",
-        alignItems: "stretch",
+        alignItems: "center",
+        justifyContent: "center",
+        overflowX: "hidden",
+        position: "relative",
+        padding: "40px 24px",
+        // Force dark mode local variables overrides
+        "--bg": "#050816",
+        "--bg2": "#09122A",
+        "--bg3": "#0e1228",
+        "--surface": "rgba(14, 18, 40, 0.75)",
+        "--surface2": "rgba(14, 18, 40, 0.9)",
+        "--border": "rgba(255, 255, 255, 0.06)",
+        "--border2": "rgba(255, 255, 255, 0.12)",
+        "--text": "#F6F6F8",
+        "--text2": "#B8B8C8",
+        "--text3": "#626784",
+        "--primary": "#A86BFF",
+        "--accent": "#37C6D9",
+        "--highlight": "#FF6BCB",
+        "--secondary": "#5D7BFF",
+        "--red": "#FF8CA8",
+        "--red-dim": "rgba(255, 140, 168, 0.08)",
+        "--radius-xl": "20px",
+        "--radius-md": "8px",
+        "--radius-full": "999px",
       }}
+      className="reg-root"
     >
       {/* Local styles only (keeps this file self-contained). */}
       <style>{`
-        .reg-split { width: 100%; min-height: 100vh; display: flex; }
-        .reg-left { flex: 0 0 440px; display: flex; align-items: center; justify-content: center; padding: 28px 18px; }
+        .reg-container {
+          width: 100%;
+          max-width: 1050px;
+          display: grid;
+          grid-template-columns: 460px 1fr;
+          gap: 60px;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          z-index: 1;
+        }
+        .reg-left-col {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+        }
         .reg-card {
           width: 100%;
           max-width: 420px;
           background: rgba(255, 255, 255, 0.04);
           border: 1px solid var(--border2);
-          border-radius: var(--r-xl);
-          padding: 28px;
+          border-radius: var(--radius-xl);
+          padding: 32px;
           box-shadow: 0 18px 70px rgba(0,0,0,0.35);
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
@@ -72,34 +112,30 @@ export default function Register() {
           pointer-events: none;
         }
         .reg-card > * { position: relative; z-index: 1; }
-        .reg-right {
-          flex: 1;
-          min-height: 100vh;
-          position: relative;
-          overflow: hidden;
+
+        .reg-right-col {
           display: flex;
-          align-items: flex-end;
-          padding: 44px 44px 44px;
-          background:
-            radial-gradient(900px circle at 20% 0%, rgba(79,124,255,0.20) 0%, transparent 55%),
-            radial-gradient(900px circle at 90% 10%, rgba(124,109,250,0.18) 0%, transparent 55%),
-            radial-gradient(900px circle at 30% 100%, rgba(34,201,135,0.14) 0%, transparent 55%),
-            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0));
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          position: relative;
+          width: 100%;
         }
-        .reg-right::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(90deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.45) 90%);
-          pointer-events: none;
+        .reg-hero {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
         }
-        .reg-hero { position: relative; z-index: 1; max-width: 520px; }
         .reg-pill {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          padding: 10px 14px;
-          border-radius: 999px;
+          padding: 8px 14px;
+          border-radius: var(--radius-full);
           background: rgba(255,255,255,0.06);
           border: 1px solid rgba(255,255,255,0.10);
           backdrop-filter: blur(10px);
@@ -108,34 +144,52 @@ export default function Register() {
           font-size: 13px;
           font-weight: 600;
         }
-        .reg-hero-title { font-size: 32px; font-weight: 750; letter-spacing: -0.04em; margin-bottom: 10px; }
-        .reg-hero-sub { color: var(--text2); font-size: 14px; line-height: 1.7; margin-bottom: 18px; max-width: 460px; }
-        .reg-graphic {
-          margin-top: 16px;
-          width: 100%;
-          max-width: 520px;
-          height: 220px;
-          border-radius: var(--r-xl);
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.10);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
+        .reg-hero-title {
+          font-size: clamp(24px, 2.5vw, 30px);
+          font-weight: 750;
+          line-height: 1.2;
+          letter-spacing: -0.04em;
+          margin-bottom: 8px;
+          margin-top: 12px;
         }
-        @media (max-width: 980px) {
-          .reg-split { flex-direction: column; }
-          .reg-left { flex: initial; padding: 18px 14px; }
-          .reg-right { padding: 28px 18px; align-items: center; }
-          .reg-hero-title { font-size: 26px; }
+        .reg-hero-sub {
+          color: var(--text2);
+          font-size: 14px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+          max-width: 420px;
+        }
+        .glow-bg {
+          position: absolute;
+          width: 500px;
+          height: 500px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(168, 163, 255, 0.08) 0%, transparent 70%);
+          z-index: 0;
+          pointer-events: none;
+        }
+        @media (max-width: 980px) and (min-width: 768px) {
+          .reg-container {
+            grid-template-columns: 420px 1fr;
+            gap: 32px;
+          }
+        }
+        @media (max-width: 767px) {
+          .reg-container {
+            grid-template-columns: 1fr;
+            gap: 48px;
+            max-width: 420px;
+          }
         }
       `}</style>
 
-      <div className="reg-split">
+      {/* Floating Glows for background design */}
+      <div className="glow-bg" style={{ top: "-10%", left: "-10%" }} />
+      <div className="glow-bg" style={{ bottom: "-10%", right: "-10%" }} />
+
+      <div className="reg-container">
         {/* Left: signup form */}
-        <div className="reg-left">
+        <div className="reg-left-col">
           <div className="reg-card">
             <div style={{ textAlign: "center", marginBottom: 26 }}>
               <div
@@ -159,6 +213,7 @@ export default function Register() {
                   fontSize: 26,
                   fontWeight: 650,
                   letterSpacing: "-0.03em",
+                  color: "var(--text)",
                 }}
               >
                 Create account
@@ -178,10 +233,10 @@ export default function Register() {
             {/* Signup form */}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Full name</label>
+                <label style={{ color: "var(--text2)" }}>Full name</label>
                 <input
                   type="text"
-                  placeholder="Arshiya Singh"
+                  placeholder="Enter your name"
                   value={form.name}
                   onChange={(e) =>
                     setForm((p) => ({ ...p, name: e.target.value }))
@@ -191,7 +246,7 @@ export default function Register() {
               </div>
 
               <div className="form-group">
-                <label>Email</label>
+                <label style={{ color: "var(--text2)" }}>Email</label>
                 <input
                   type="email"
                   placeholder="you@example.com"
@@ -203,7 +258,7 @@ export default function Register() {
               </div>
 
               <div className="form-group">
-                <label>Password</label>
+                <label style={{ color: "var(--text2)" }}>Password</label>
                 <input
                   type="password"
                   placeholder="Min. 6 characters"
@@ -215,7 +270,7 @@ export default function Register() {
               </div>
 
               <div className="form-group">
-                <label>Currency</label>
+                <label style={{ color: "var(--text2)" }}>Currency</label>
                 <select
                   value={form.currency}
                   onChange={(e) =>
@@ -234,7 +289,7 @@ export default function Register() {
                   style={{
                     background: "var(--red-dim)",
                     border: "1px solid rgba(240,92,110,0.25)",
-                    borderRadius: "var(--r-md)",
+                    borderRadius: "var(--radius-md)",
                     padding: "10px 14px",
                     color: "var(--red)",
                     fontSize: 13,
@@ -283,8 +338,8 @@ export default function Register() {
           </div>
         </div>
 
-        {/* Right: visual/branding */}
-        <div className="reg-right" aria-hidden="true">
+        {/* Right: visual/branding with illustration */}
+        <div className="reg-right-col" aria-hidden="true">
           <div className="reg-hero">
             <div className="reg-pill">
               <span style={{ color: "var(--accent)" }}>FinFlow</span>
@@ -304,91 +359,145 @@ export default function Register() {
             <div className="reg-hero-title">Track smarter. Spend better.</div>
             <div className="reg-hero-sub">
               A calm way to track expenses, set category budgets, and understand
-              your spending—month by month.
+              your spending - month by month.
             </div>
 
-            <div className="reg-graphic">
-              <svg
-                width="100%"
-                height="100%"
-                viewBox="0 0 520 220"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                    <stop
-                      offset="0%"
-                      stopColor="var(--accent)"
-                      stopOpacity="0.55"
-                    />
-                    <stop offset="55%" stopColor="#22c987" stopOpacity="0.30" />
-                    <stop
-                      offset="100%"
-                      stopColor="#f05c6e"
-                      stopOpacity="0.22"
-                    />
-                  </linearGradient>
-                  <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.08" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0.02" />
-                  </linearGradient>
-                </defs>
+            {/* Subtle premium CSS-only decorative element */}
+            <div
+              style={{
+                width: "100%",
+                maxWidth: 420,
+                height: 220,
+                borderRadius: "var(--radius-lg)",
+                border: "1px solid rgba(255, 255, 255, 0.04)",
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                boxShadow: "0 24px 60px rgba(0, 0, 0, 0.35)",
+                position: "relative",
+                overflow: "hidden",
+                marginTop: 24,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                padding: "24px",
+                boxSizing: "border-box",
+              }}
+            >
+              {/* Subtle blurred purple/pink glow */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-40px",
+                  right: "-40px",
+                  width: 150,
+                  height: 150,
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(circle, rgba(168, 107, 255, 0.15) 0%, transparent 70%)",
+                  filter: "blur(15px)",
+                  pointerEvents: "none",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "-50px",
+                  left: "-50px",
+                  width: 180,
+                  height: 180,
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(circle, rgba(55, 198, 217, 0.1) 0%, transparent 70%)",
+                  filter: "blur(20px)",
+                  pointerEvents: "none",
+                }}
+              />
 
-                {/* Background grid */}
-                <rect x="0" y="0" width="520" height="220" fill="url(#g2)" />
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <line
-                    key={i}
-                    x1={i * 52}
-                    y1={0}
-                    x2={i * 52}
-                    y2={220}
-                    stroke="rgba(255,255,255,0.06)"
-                    strokeWidth="1"
-                  />
-                ))}
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <line
-                    key={i + 20}
-                    x1={0}
-                    y1={i * 44}
-                    x2={520}
-                    y2={i * 44}
-                    stroke="rgba(255,255,255,0.05)"
-                    strokeWidth="1"
-                  />
-                ))}
-
-                {/* Decorative “chart” path */}
-                <path
-                  d="M25 160 C 95 120, 130 180, 185 145
-                     C 245 106, 275 170, 335 130
-                     C 395 92, 430 135, 495 80"
-                  fill="none"
-                  stroke="url(#g1)"
-                  strokeWidth="3"
-                  strokeLinecap="round"
+              {/* Clean abstract lines representing UI layout blocks (Linear/Vercel style) */}
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <div
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    background: "var(--primary)",
+                    opacity: 0.7,
+                  }}
                 />
+                <div
+                  style={{
+                    width: 80,
+                    height: 8,
+                    borderRadius: 4,
+                    background: "rgba(255,255,255,0.08)",
+                  }}
+                />
+              </div>
 
-                {/* Dots */}
-                {[
-                  { x: 25, y: 160, c: "var(--accent)" },
-                  { x: 185, y: 145, c: "#22c987" },
-                  { x: 335, y: 130, c: "#f05c6e" },
-                  { x: 495, y: 80, c: "var(--accent)" },
-                ].map((p, idx) => (
-                  <g key={idx}>
-                    <circle cx={p.x} cy={p.y} r="6" fill={p.c} opacity="0.18" />
-                    <circle
-                      cx={p.x}
-                      cy={p.y}
-                      r="3.2"
-                      fill={p.c}
-                      opacity="0.85"
-                    />
-                  </g>
-                ))}
-              </svg>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+              >
+                <div
+                  style={{
+                    width: "90%",
+                    height: 6,
+                    borderRadius: 3,
+                    background: "rgba(255,255,255,0.04)",
+                  }}
+                />
+                <div
+                  style={{
+                    width: "65%",
+                    height: 6,
+                    borderRadius: 3,
+                    background: "rgba(255,255,255,0.04)",
+                  }}
+                />
+                <div
+                  style={{
+                    width: "40%",
+                    height: 6,
+                    borderRadius: 3,
+                    background: "rgba(255,255,255,0.04)",
+                  }}
+                />
+              </div>
+
+              {/* Faint divider line with a subtle accent gradient */}
+              <div
+                style={{
+                  width: "100%",
+                  height: 1,
+                  background:
+                    "linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(168, 107, 255, 0.25) 50%, rgba(255,255,255,0.04) 100%)",
+                }}
+              />
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: 50,
+                    height: 8,
+                    borderRadius: 4,
+                    background: "rgba(255,255,255,0.08)",
+                  }}
+                />
+                <div
+                  style={{
+                    width: 32,
+                    height: 16,
+                    borderRadius: 8,
+                    background: "rgba(55, 198, 217, 0.08)",
+                    border: "1px solid rgba(55, 198, 217, 0.15)",
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

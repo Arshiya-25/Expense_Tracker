@@ -30,10 +30,13 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         currency: user.currency,
+        avatar: user.avatar || "",
         monthlyIncome: user.monthlyIncome,
         savingsGoal: user.savingsGoal,
         monthlyIncomeGoal: user.monthlyIncomeGoal,
         goals: user.goals,
+        reminders: user.reminders || [],
+        categoryPreferences: user.categoryPreferences || [],
       },
     });
   } catch (err) {
@@ -70,6 +73,8 @@ router.post("/login", async (req, res) => {
         savingsGoal: user.savingsGoal,
         monthlyIncomeGoal: user.monthlyIncomeGoal,
         goals: user.goals,
+        reminders: user.reminders || [],
+        categoryPreferences: user.categoryPreferences || [],
         isDemo: user.isDemo || false,
       },
     });
@@ -102,6 +107,8 @@ router.post("/demo", async (req, res) => {
         savingsGoal: user.savingsGoal,
         monthlyIncomeGoal: user.monthlyIncomeGoal,
         goals: user.goals,
+        reminders: user.reminders || [],
+        categoryPreferences: user.categoryPreferences || [],
         isDemo: true,
       },
     });
@@ -146,6 +153,35 @@ router.patch("/profile", async (req, res) => {
         req.body.monthlyIncomeGoal !== undefined
       ) {
         return res.status(403).json({ message: "Profile settings cannot be modified in Demo Mode" });
+      }
+    }
+
+    // Backend validation for dates (optional goals deadline, mandatory reminders due date)
+    if (req.body.goals !== undefined) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      for (const goal of req.body.goals) {
+        if (goal.deadline) {
+          const dl = new Date(goal.deadline);
+          dl.setHours(0, 0, 0, 0);
+          if (dl < today) {
+            return res.status(400).json({ message: "Goal deadline date cannot be in the past." });
+          }
+        }
+      }
+    }
+
+    if (req.body.reminders !== undefined) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      for (const rem of req.body.reminders) {
+        if (rem.dueDate) {
+          const dd = new Date(rem.dueDate);
+          dd.setHours(0, 0, 0, 0);
+          if (dd < today) {
+            return res.status(400).json({ message: "Reminder due date cannot be in the past." });
+          }
+        }
       }
     }
 

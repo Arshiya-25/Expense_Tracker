@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { updateProfile } from "../api";
 import { format } from "date-fns";
-import { formatCurrency, formatDate } from "../utils/formatters";
+import { formatCurrency, formatDate, sortGoals } from "../utils/formatters";
 import { User, Settings, BarChart3, Target, Bell, Wallet, PiggyBank, CreditCard, Percent } from "lucide-react";
 
 // Map legacy fmt formatter to safe utility wrapper
@@ -18,6 +18,14 @@ const CURRENCIES = [
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
+  const getLocalDateString = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+  const todayStr = getLocalDateString();
   const [activeTab, setActiveTab] = useState("profile"); // Tab navigation state
   const [form, setForm] = useState(() => ({
     name: user?.name || "",
@@ -27,7 +35,7 @@ export default function Profile() {
     avatarInitials: localStorage.getItem("finflow_avatarInitials") || "",
   }));
 
-  const [goals, setGoals] = useState(() => user?.goals || []);
+  const [goals, setGoals] = useState(() => sortGoals(user?.goals || []));
   const [reminders, setReminders] = useState(() => user?.reminders || []);
 
   // Goal modal/inline state
@@ -41,6 +49,8 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [goalError, setGoalError] = useState("");
+  const [reminderError, setReminderError] = useState("");
 
   const initials = user?.name
     ? user.name
@@ -60,7 +70,7 @@ export default function Profile() {
         savingsGoal: user.savingsGoal ? String(user.savingsGoal) : "",
         avatarInitials: localStorage.getItem("finflow_avatarInitials") || "",
       });
-      setGoals(user.goals || []);
+      setGoals(sortGoals(user.goals || []));
       setReminders(user.reminders || []);
     }
   }, [user]);
@@ -112,7 +122,7 @@ export default function Profile() {
     try {
       const res = await updateProfile({ goals: updatedGoals });
       updateUser(res.data);
-      setGoals(res.data.goals || []);
+      setGoals(sortGoals(res.data.goals || []));
     } catch (err) {
       alert("Failed to update goals list");
     } finally {
@@ -138,6 +148,20 @@ export default function Profile() {
   const handleAddGoal = (e) => {
     e.preventDefault();
     if (!newGoal.title || !newGoal.targetAmount) return;
+
+    if (newGoal.deadline) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const parts = newGoal.deadline.split("-");
+      const chosenDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      chosenDate.setHours(0, 0, 0, 0);
+      if (chosenDate < today) {
+        setGoalError("Goal deadline date cannot be in the past.");
+        return;
+      }
+    }
+    setGoalError("");
+
     const formatted = {
       title: newGoal.title,
       targetAmount: Number(newGoal.targetAmount),
@@ -152,6 +176,20 @@ export default function Profile() {
   const handleUpdateGoal = (e) => {
     e.preventDefault();
     if (editingGoalIndex === null) return;
+
+    if (newGoal.deadline) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const parts = newGoal.deadline.split("-");
+      const chosenDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      chosenDate.setHours(0, 0, 0, 0);
+      if (chosenDate < today) {
+        setGoalError("Goal deadline date cannot be in the past.");
+        return;
+      }
+    }
+    setGoalError("");
+
     const updated = [...goals];
     updated[editingGoalIndex] = {
       ...updated[editingGoalIndex],
@@ -174,6 +212,18 @@ export default function Profile() {
   const handleAddReminder = (e) => {
     e.preventDefault();
     if (!newReminder.title || !newReminder.amount || !newReminder.dueDate) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const parts = newReminder.dueDate.split("-");
+    const chosenDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    chosenDate.setHours(0, 0, 0, 0);
+    if (chosenDate < today) {
+      setReminderError("Reminder due date cannot be in the past.");
+      return;
+    }
+    setReminderError("");
+
     const formatted = {
       title: newReminder.title,
       amount: Number(newReminder.amount),
@@ -188,6 +238,18 @@ export default function Profile() {
   const handleUpdateReminder = (e) => {
     e.preventDefault();
     if (editingReminderIndex === null) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const parts = newReminder.dueDate.split("-");
+    const chosenDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    chosenDate.setHours(0, 0, 0, 0);
+    if (chosenDate < today) {
+      setReminderError("Reminder due date cannot be in the past.");
+      return;
+    }
+    setReminderError("");
+
     const updated = [...reminders];
     updated[editingReminderIndex] = {
       ...updated[editingReminderIndex],
@@ -486,6 +548,11 @@ export default function Profile() {
                 </h3>
 
                 <form onSubmit={editingGoalIndex !== null ? handleUpdateGoal : handleAddGoal} style={{ marginBottom: 24, paddingBottom: 20, borderBottom: "1px solid var(--border)" }}>
+                  {goalError && (
+                    <p style={{ color: "var(--red)", fontSize: 13, marginBottom: 12 }}>
+                      {goalError}
+                    </p>
+                  )}
                   <div className="form-group">
                     <label>Goal Title</label>
                     <input
@@ -524,7 +591,11 @@ export default function Profile() {
                     <input
                       type="date"
                       value={newGoal.deadline}
-                      onChange={(e) => setNewGoal((p) => ({ ...p, deadline: e.target.value }))}
+                      min={todayStr}
+                      onChange={(e) => {
+                        setNewGoal((p) => ({ ...p, deadline: e.target.value }));
+                        setGoalError("");
+                      }}
                     />
                   </div>
                   <div style={{ display: "flex", gap: 10 }}>
@@ -538,6 +609,7 @@ export default function Profile() {
                         onClick={() => {
                           setEditingGoalIndex(null);
                           setNewGoal({ title: "", targetAmount: "", currentAmount: "", deadline: "" });
+                          setGoalError("");
                         }}
                       >
                         Cancel
@@ -606,6 +678,11 @@ export default function Profile() {
                 </h3>
 
                 <form onSubmit={editingReminderIndex !== null ? handleUpdateReminder : handleAddReminder} style={{ marginBottom: 24, paddingBottom: 20, borderBottom: "1px solid var(--border)" }}>
+                  {reminderError && (
+                    <p style={{ color: "var(--red)", fontSize: 13, marginBottom: 12 }}>
+                      {reminderError}
+                    </p>
+                  )}
                   <div className="form-group">
                     <label>Reminder Title</label>
                     <input
@@ -642,7 +719,11 @@ export default function Profile() {
                     <input
                       type="date"
                       value={newReminder.dueDate}
-                      onChange={(e) => setNewReminder((p) => ({ ...p, dueDate: e.target.value }))}
+                      min={todayStr}
+                      onChange={(e) => {
+                        setNewReminder((p) => ({ ...p, dueDate: e.target.value }));
+                        setReminderError("");
+                      }}
                       required
                     />
                   </div>
@@ -657,6 +738,7 @@ export default function Profile() {
                         onClick={() => {
                           setEditingReminderIndex(null);
                           setNewReminder({ title: "", amount: "", dueDate: "", type: "custom" });
+                          setReminderError("");
                         }}
                       >
                         Cancel
