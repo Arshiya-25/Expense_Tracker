@@ -160,28 +160,11 @@ export default function Landing() {
           flexDirection: "column",
           alignItems: "center",
           textAlign: "center",
-          padding: "100px 8% 60px",
+          padding: "160px 8% 60px",
           position: "relative",
           zIndex: 1,
         }}
       >
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "6px 14px",
-            borderRadius: "var(--radius-full)",
-            background: "rgba(168, 163, 255, 0.08)",
-            border: "1px solid rgba(168, 163, 255, 0.15)",
-            marginBottom: 28,
-          }}
-        >
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--primary)" }} />
-          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--primary)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-            Now in Private Beta
-          </span>
-        </div>
 
         <h1
           style={{
