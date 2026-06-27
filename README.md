@@ -1,6 +1,6 @@
 # FinFlow - Expense Tracker
 
-A full-stack expense tracking web application for managing personal finances — track income, expenses, and budgets with a clean dashboard.
+A full-stack personal finance web application built to bring clarity to your spending, budgets, and savings goals — without the clutter.
 
 🔗 **Live Demo:** [expense-tracker-l173.vercel.app](https://expense-tracker-l173.vercel.app)
 
@@ -8,9 +8,15 @@ A full-stack expense tracking web application for managing personal finances —
 
 - JWT-based user authentication (register & login)
 - Add, edit, and delete transactions
-- Categorize expenses and set budgets
-- Dashboard with real-time insights and summaries
-- Persistent data storage via MongoDB Atlas
+- Set monthly budgets per category and track spending in real time
+- **Budget Headroom** -
+  instead of just showing % used, each budget card calculates how much you can safely spend per day for the
+  rest of the month based on what's remaining (e.g. "₹800/day safe to spend · 4 days left")
+- Dashboard with income, expenses, net savings, and active goals at a glance
+- Spending breakdown by category with a donut chart
+- Savings goals with progress tracking and target deadlines
+- Upcoming bill and subscription reminders
+- Demo mode with pre-seeded realistic data
 
 
 ## Tech Stack
